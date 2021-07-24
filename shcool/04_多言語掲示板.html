@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../style.css" />
+
+    <!-- vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <!-- コンポーネント -->
+    <script src="commpornent.js"></script>
+    <title>多言語掲示板</title>
+  </head>
+
+  <body>
+    <div id="app" style="background: aliceblue">
+      <!-- header -->
+      <navbar></navbar>
+
+      <!-- bodyコンテナ -->
+      <div class="container-fluid row" style="padding-top: 5rem">
+        <!-- サイドメニュー -->
+        <sidemenu></sidemenu>
+
+        <!-- メインコンテンツ -->
+        <div class="main container col-md">
+          <!-- タイトル -->
+          <h3 class="">多言語掲示板</h3>
+          <!-- スレッド表示 -->
+          <div v-for="(message,index) in thread" class="row mb-2 bg-white">
+            <span class="flex" style="color: cadetblue"
+              ><span class="me-2">{{message.date}}</span
+              ><span>{{message.name}}</span></span
+            >
+            <!-- 英語 -->
+            <div class="col-md m-1 flex-v">
+              <div class="fs-5"><strong> {{message.english}}</strong></div>
+              <div
+                v-for="item in checkEnglish[index]"
+                class="ps-2 bg-light border-bottom"
+              >
+                {{item}}
+              </div>
+              <div class="mt-a mb-1 row p-1 alert alert-primary">
+                <label for="english" class="col-sm-2 col-form-label"
+                  >check</label
+                >
+                <input
+                  type="text"
+                  v-model="addEnglish[index]"
+                  class="col-sm form-control"
+                  id="addEnglish"
+                  @keyup.enter="addCheckEnglish(index,addEnglish[index])"
+                />
+              </div>
+            </div>
+            <!-- 日本語 -->
+            <div class="col-md m-1 flex-v">
+              <div class="fs-5"><strong> {{message.japanese}}</strong></div>
+              <div
+                v-for="item in checkJapanese[index]"
+                class="ps-2 bg-light border-bottom"
+              >
+                {{item}}
+              </div>
+              <div class="mt-a mb-1 row p-1 alert alert-primary">
+                <label for="addJapanese" class="col-sm-2 col-form-label"
+                  >指摘</label
+                >
+                <input
+                  type="text"
+                  v-model="addJapanese[index]"
+                  class="col-sm form-control"
+                  id="addJapanese"
+                  @keyup.enter="addCheckJapanese(index,addJapanese[index])"
+                />
+              </div>
+            </div>
+            <!-- <div class="col-md"><strong>{{message.japanese}}</strong></div> -->
+          </div>
+          <!-- 投稿 -->
+          <div class="alert alert-primary">
+            <form action="">
+              <div class="mb-1 row">
+                <label for="english" class="col-sm-2 col-form-label"
+                  >English</label
+                >
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    v-model="inputEnglish"
+                    class="form-control"
+                    id="english"
+                    @keyup.enter="addWord()"
+                  />
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label for="japanese" class="col-sm-2 col-form-label"
+                  >Japanese</label
+                >
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    v-model="inputJapanese"
+                    class="form-control"
+                    id="japanese"
+                    @keyup.enter="addWord()"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-1 row">
+                <input
+                  type="button"
+                  value="set"
+                  class="col-md-6 offset-md-3 btn btn-primary"
+                  @click="addWord"
+                />
+              </div>
+            </form>
+          </div>
+          <!-- コンテンツ -->
+        </div>
+      </div>
+    </div>
+    <!-- vue操作 -->
+    <script>
+      //   vueインスタンス
+      var app = new Vue({
+        el: "#app",
+        data: {
+          inputEnglish: "",
+          checkEnglish: [[""], ["you may want to watch anime."]],
+          addEnglish: [],
+          inputJapanese: "",
+          checkJapanese: [["日本語を勉強したいです"], [""]],
+          addJapanese: [],
+          thread: [
+            {
+              date: "2021/7/18 10:17:18",
+              name: "ななし",
+              english: "I want to sutdy japanise.",
+              japanese: "日本語が勉強したいです",
+            },
+            {
+              date: "2021/7/18 10:16:20",
+              name: "ななし",
+              english: "What do you think is the best way to learn japanise?",
+              japanese: "良い勉強法はありますか？",
+            },
+          ],
+        },
+        methods: {
+          addWord() {
+            var date = new Date().toLocaleString("ja");
+            // console.log(this.inputEnglish, this.inputJapanese, this.inputFile);
+            this.thread.push({
+              date: date,
+              name: "ななし",
+              english: this.inputEnglish,
+              japanese: this.inputJapanese,
+            });
+            this.checkEnglish.push([]);
+            this.checkJapanese.push([]);
+            this.inputEnglish = "";
+            this.inputJapanese = "";
+          },
+          addCheckEnglish(index, input) {
+            console.log(index, input);
+            this.checkEnglish[index].push(input);
+            this.addEnglish[index] = "";
+          },
+          addCheckJapanese(index, input) {
+            // console.log(index, input);
+            this.checkJapanese[index].push(input);
+            this.addJapanese[index] = "";
+          },
+        },
+      });
+    </script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      .container {
+        max-width: 1000px;
+      }
+    </style>
+  </body>
+</html>

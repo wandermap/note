@@ -20,7 +20,7 @@ Vue.component("navbar", {
               <a class="nav-link active" aria-current="page" href="../business/index.html">ビジネス</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">スクール</a>
+              <a class="nav-link active" aria-current="page" href="01_レクチャー.html">スクール</a>
             </li>
           </ul>
 
@@ -46,6 +46,8 @@ Vue.component("sidemenu", {
   <ul class="col-md-2 sidemenu" style="list-style: none">
     <li><a href="01_レクチャー.html">レクチャー</a></li>
     <li><a href="02_選択問題.html">選択問題</a></li>
+    <li><a href="03_言語学習.html">言語学習</a></li>
+    <li><a href="04_多言語掲示板.html">多言語掲示板</a></li>
   </ul>
   `,
 });

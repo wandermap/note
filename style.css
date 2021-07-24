@@ -33,3 +33,22 @@ p {
   border-bottom: 1px solid #e9ecef;
   /* border-radius: 0.25rem; */
 }
+
+/* flex */
+.flex {
+  display: flex;
+}
+
+.flex-v {
+  display: flex;
+  flex-direction: column;
+}
+
+/* helper */
+.m-a {
+  margin: auto;
+}
+
+.mt-a {
+  margin-top: auto;
+}
